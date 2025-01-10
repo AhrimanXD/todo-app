@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 10px; text-align: left; }
+        form { display: inline; }
+    </style>
+</head>
+<body>
+    <h1>Todo App</h1>
+
+    <!-- Form to Add a New Todo -->
+    <form action="{{ url_for('add_todo') }}" method="POST">
+        <input type="text" name="title" placeholder="Enter a new task" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <!-- List of Todos -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Completed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for todo in todos %}
+            <tr>
+                <td>{{ todo.id }}</td>
+                <td>{{ todo.title }}</td>
+                <td>{{ 'Yes' if todo.completed else 'No' }}</td>
+                <td>
+                    <!-- Form to Toggle Completion -->
+                    <form action="{{ url_for('update_todo', todo_id=todo.id) }}" method="POST">
+                        <button type="submit">{{ 'Mark Incomplete' if todo.completed else 'Mark Complete' }}</button>
+                    </form>
+
+                    <!-- Form to Delete Todo -->
+                    <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="POST">
+                        <button type="submit" style="color: red;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
